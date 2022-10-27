@@ -12,15 +12,15 @@
 <p>영화 : {{ review.movie_name }}</p>
 <p>작성시간 : {{ review.created_at }}</p>
 <p>수정시간 : {{ review.updated_at }}</p>
-<a class="like-heart" href="{% url 'articles:like' article.pk %}">
+<a class="like-heart" href="{% url 'reviews:like' reviews.pk %}">
     <span>
       {% if request.user.is_authenticated %}
-        <a class="like-heart" href="{% url 'articles:like' article.pk %}">
-        {% if request.user in article.like_users.all %}
+        <a class="like-heart" href="{% url 'reviews:like' reviews.pk %}">
+        {% if request.user in reviews.like_users.all %}
           <i class="bi bi-heart-fill"></i>
         {% else %}
           <i class="bi bi-heart"></i>
-        {% endif %}</a>{{ article.like_users.count }}</span>
+        {% endif %}</a>{{ reviews.like_users.count }}</span>
       {% endif %}
 <a href="{% url 'reviews:update' review.pk %}">수정하기</a>
 <a href="{% url 'reviews:delete' review.pk %}}">삭제하기</a>
@@ -32,7 +32,7 @@
   <input type="submit" value="작성">
 </form>
 {% endif %}
-{% endif %}
+
 <div id="comments">
   {% for comment in review.comment_set.all %}
     <div id="comment">
