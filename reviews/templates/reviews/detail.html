@@ -4,7 +4,7 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% block content %}
-<a href="{}">목록으로</a>
+<a href="{% url 'reviews:index' %}">목록으로</a>
 <h1>{{ review.pk }}번 게시글</h1>
 <p>작성자 : {{ review.user }}</p>
 <p>제목 : {{ review.title }}</p>
@@ -22,47 +22,8 @@
           <i class="bi bi-heart"></i>
         {% endif %}</a>{{ article.like_users.count }}</span>
       {% endif %}
-  {% if request.user == article.user %}
-<a href="{}">수정하기</a>
-<a href="{}">삭제하기</a>
-{% comment %} 댓글 {% endcomment %}
-{% if request.user.is_authenticated %} 
-<h4>댓글</h4>
-{% if comments %}
-<p >{{ comments.count }}개 </p>
-{% endif %}
+<a href="{% url 'reviews:update' review.pk %}">수정하기</a>
+<a href="{% url 'reviews:delete' review.pk %}}">삭제하기</a>
 
-{% if request.user.is_authenticated %}
-<form id="comment-form" data-article-id="{{ review.pk }}">
-  {% csrf_token %}
-  {% bootstrap_form comment_form %}
-  <input type="submit" value="작성">
-</form>
-{% endif %}
-{% endif %}
-{% for comment in comments %}
-  {% if request.user == comment.user %}
-  <a href="{}" class='btn btn-danger float-end'>삭제</a>
-  {% endif %}
-  <div class='comments'>
-    <p> {{ comment.user.username}}님 </p>
-    <p> {{ comment.content }}</p>
-  </div>
-  <hr>
-  <br>
-
-{%empty%}
-  <p>댓글이 없어요 ㅠ_ㅠ</p>
-{% endfor %}
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-  const commentForm = document.querySelector('#comment-form')
-  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
-  commentForm.addEventListener('submit', function(event) {
-    
-  })
-</script>
 
 {% endblock %}
