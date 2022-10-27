@@ -12,6 +12,17 @@
 <p>영화 : {{ review.movie_name }}</p>
 <p>작성시간 : {{ review.created_at }}</p>
 <p>수정시간 : {{ review.updated_at }}</p>
+<a class="like-heart" href="{% url 'articles:like' article.pk %}">
+    <span>
+      {% if request.user.is_authenticated %}
+        <a class="like-heart" href="{% url 'articles:like' article.pk %}">
+        {% if request.user in article.like_users.all %}
+          <i class="bi bi-heart-fill"></i>
+        {% else %}
+          <i class="bi bi-heart"></i>
+        {% endif %}</a>{{ article.like_users.count }}</span>
+      {% endif %}
+  {% if request.user == article.user %}
 <a href="{}">수정하기</a>
 <a href="{}">삭제하기</a>
 {% comment %} 댓글 {% endcomment %}

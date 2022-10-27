@@ -72,4 +72,13 @@ def delete(request, pk):
 
     return redirect('reviews:index')
 
+def like(request, pk):
+    review = Review.objects.get(pk=pk)
+    if request.user in review.like_users.all():
+        review.like_users.remove(request.user)
+    else:
+        review.like_users.add(request.user)
+    
+    return redirect('review:detail',pk)
+
 
