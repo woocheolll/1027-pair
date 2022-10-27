@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Review, Comment
-from .forms import CommentForm
+from .forms import CommentForm, ReviewForm
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -34,3 +35,18 @@ def comments(request, pk):
             "userName": comment.user.username,
         }
     return JsonResponse(context)
+
+
+@login_required
+def create(request):
+    if request.method == 'POST':
+        review_form = ReviewForm(request.POST)
+        if review_form.is_valid():
+            db_review_form = review_form.save(commit=False)
+            db_review_form.user = request.user
+            db_review_form.save()
+            return redirect('reviews:index')
+    else:
+        review_form = ReviewForm()
+    return render(request,'reviews/create.html',{'review_form':review_form})
+

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Comment
+from .models import Comment, Review
 
 
 class CommentForm(forms.ModelForm):
@@ -9,3 +9,9 @@ class CommentForm(forms.ModelForm):
         labels = {
             "content": "",
         }
+
+class ReviewForm(forms.ModelForm):
+    
+    class Meta():
+        model = Review
+        fields = ['title','content','movie_name','grade']
