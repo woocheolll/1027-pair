@@ -51,20 +51,20 @@ def create(request):
     return render(request,'reviews/create.html',{'review_form':review_form})
 
 def update(request,pk):
-    db_data = Review.objects.get(pk=pk)
+    db_review_form = Review.objects.get(pk=pk)
 
     if request.method == 'POST':
-        data = ReviewForm(request.POST, instance=db_data)
+        review_form = ReviewForm(request.POST, instance=db_review_form)
 
-        if data.is_valid():
-            data.save()
+        if review_form.is_valid():
+            review_form.save()
 
             return redirect('reviews:index')
 
     else:
-        data = ReviewForm(instance=db_data)
+        review_form = ReviewForm(instance=db_review_form)
 
-    return render(request, 'reviews/create.html', {'data': data})
+    return render(request, 'reviews/create.html', {'review_form': review_form})
 
 def delete(request, pk):
     review = Review.objects.get(pk=pk)

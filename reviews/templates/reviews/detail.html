@@ -12,10 +12,10 @@
 <p>영화 : {{ review.movie_name }}</p>
 <p>작성시간 : {{ review.created_at }}</p>
 <p>수정시간 : {{ review.updated_at }}</p>
-<a class="like-heart" href="{% url 'reviews:like' reviews.pk %}">
+<a class="like-heart" href="{% url 'reviews:like' review.pk %}">
     <span>
       {% if request.user.is_authenticated %}
-        <a class="like-heart" href="{% url 'reviews:like' reviews.pk %}">
+        <a class="like-heart" href="{% url 'reviews:like' review.pk %}">
         {% if request.user in reviews.like_users.all %}
           <i class="bi bi-heart-fill"></i>
         {% else %}
@@ -23,7 +23,7 @@
         {% endif %}</a>{{ reviews.like_users.count }}</span>
       {% endif %}
 <a href="{% url 'reviews:update' review.pk %}">수정하기</a>
-<a href="{% url 'reviews:delete' review.pk %}}">삭제하기</a>
+<a href="{% url 'reviews:delete' review.pk %}">삭제하기</a>
 
 {% if request.user.is_authenticated %}
 <form id="comment-form" data-review-id="{{ review.pk }}">
