@@ -94,8 +94,9 @@ def follow(request, user_pk):
         is_follow = True
     context = {
         "isFollow": is_follow,
+        "followers_count": user.followers.count(),
+        "followings_count": user.followings.count(),
     }
-    # return redirect("accounts:detail", user_pk)
     return JsonResponse(context)
 
 
