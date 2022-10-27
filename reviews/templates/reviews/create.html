@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block content %}
+{% if request.resolver_match.url_name == 'create' %}
+    <h1>생성</h1>
+{% else %}
+    <h1>수정</h1>
+{% endif %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+
+    {% bootstrap_form data %}
+
+    {% bootstrap_button button_type="submit" content="OK" %}
+</form>
+{% endblock %}
