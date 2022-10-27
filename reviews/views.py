@@ -35,3 +35,19 @@ def create(request):
         review_form = ReviewForm()
     return render(request,'reviews/create.html',{'review_form':review_form})
 
+def update(request,pk):
+    db_data = Review.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        data = ReviewForm(request.POST, instance=db_data)
+
+        if data.is_valid():
+            data.save()
+
+            return redirect('reviews:index')
+
+    else:
+        data = ReviewForm(instance=db_data)
+
+    return render(request, 'reviews/create.html', {'data': data})
+
