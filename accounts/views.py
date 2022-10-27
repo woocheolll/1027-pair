@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import get_user_model, update_session_auth_hash
@@ -67,7 +68,7 @@ def update(request):
     context = {
         "form": form,
     }
-    return render(request, "accounts:update.html", context)
+    return render(request, "accounts/update.html", context)
 
 
 def detail(request, user_pk):
@@ -87,9 +88,15 @@ def follow(request, user_pk):
         return redirect("accounts:detail", user_pk)
     if request.user in user.followers.all():
         user.followers.remove(request.user)
+        is_follow = False
     else:
         user.followers.add(request.user)
-    return redirect("accounts:detail", user_pk)
+        is_follow = True
+    context = {
+        "isFollow": is_follow,
+    }
+    # return redirect("accounts:detail", user_pk)
+    return JsonResponse(context)
 
 
 @login_required

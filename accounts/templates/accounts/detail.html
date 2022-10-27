@@ -13,19 +13,17 @@
       | 팔로워 :
       {{user.followers.count}}
       {% if request.user != user %}
-        <a href="{% url 'accounts:follow' user.pk %}" class="btn btn-primary ms-4">
-          {% if request.user in user.followers.all %}
-            언팔로우
-          {% else %}
-            팔로우
-          {% endif %}
-        </a>
+        <form id="follow-form" data-user-id="{{ user.pk }}" action="">
+          <button id="followBtn" type="submit" class="btn btn-primary">팔로우</button>
+        </form>
       {% endif %}
     </p>
   </div>
   {% if request.user == user %}
-    <div>
+    <div class="mt-3">
       <a href="{% url 'accounts:update' %} " class='btn btn-outline-primary'>프로필 수정</a>
+      <a href="{% url 'accounts:changePassword' %}" class='btn btn-outline-success'>비밀번호 변경</a>
+      <a href="{% url 'accounts:delete' %}" class='btn btn-outline-secondary'>탈퇴</a>
     </div>
   {% endif %}
   <div>
