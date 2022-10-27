@@ -3,6 +3,47 @@
 {% load widget_tweaks %}
 
 {% block content %}
+<a href="{% url 'reviews:index' %}">목록으로</a><br>
+<span>
+  {% if request.user.is_authenticated %}
+    <a class="like-heart" href="{% url 'reviews:like' review.pk %}">
+    {% if request.user in review.like_users.all %}
+      <i class="bi bi-heart-fill"></i>
+    {% else %}
+      <i class="bi bi-heart"></i>
+    {% endif %}</a>{{ review.like_users.count }}</span>
+  {% endif %}
+<h1>{{ review.pk }}번 게시글</h1>
+<p>작성자 : {{ review.user }}</p>
+<p>제목 : {{ review.title }}</p>
+<p>내용 : {{ review.content }}</p>
+<p>영화 : {{ review.movie_name }}</p>
+<p>작성시간 : {{ review.created_at }}</p>
+<p>수정시간 : {{ review.updated_at }}</p>
+{% if request.user == review.user %}
+<a href="{% url 'reviews:update' review.pk %}">수정하기</a>
+<a href="{% url 'reviews:delete' review.pk %}">삭제하기</a>
+{% endif %}
+<hr>
+{% if request.user.is_authenticated %}
+<form id="comment-form" data-review-id="{{ review.pk }}">
+  {% csrf_token %}
+  {% bootstrap_form comment_form %}
+  <input type="submit" value="작성">
+</form>
+{% endif %}
+<hr>
+<div id="comments">
+  {% for comment in review.comment_set.all %}
+    <div id="comment">
+      <span> {{ comment.user.username }} | {{ comment.content }}</span>
+      <hr>   
+    </div> 
+  {% empty %}
+    <p>댓글이 없어요 ㅠ_ㅠ</p>
+  {% endfor %}
+</div>
+</div>
   <div class="mt-3">
     <h3>{{ review.pk }}번 게시글</h3>
     <p>작성자 :
@@ -51,6 +92,7 @@
         <a href="{% url 'reviews:delete' review.pk %}" class="btn btn-outline-danger">삭제하기</a>
       </div>
     </div>
+
 
     {% if request.user.is_authenticated %}
       <div class="mt-3">
