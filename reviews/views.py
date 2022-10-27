@@ -66,3 +66,10 @@ def update(request,pk):
 
     return render(request, 'reviews/create.html', {'data': data})
 
+def delete(request, pk):
+    review = Review.objects.get(pk=pk)
+    review.delete()
+
+    return redirect('reviews:index')
+
+
