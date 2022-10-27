@@ -1,11 +1,10 @@
 from django.shortcuts import render,redirect
 from .models import Review
+
 from .forms import ReviewForm
 from django.contrib.auth.decorators import login_required
-# Create your views here.
 
 
-# Create your tests here.
 def index(request):
     review = Review.objects.all().order_by('-pk')
     context = {
@@ -22,6 +21,7 @@ def detail(request, pk):
     }
     return render(request, 'reviews/detail.html',context)
 
+
 @login_required
 def create(request):
     if request.method == 'POST':
@@ -34,3 +34,4 @@ def create(request):
     else:
         review_form = ReviewForm()
     return render(request,'reviews/create.html',{'review_form':review_form})
+

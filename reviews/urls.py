@@ -8,3 +8,4 @@ urlpatterns = [
     path('<int:pk>/', views.detail, name='detail'),
     path('create/', views.create,name='create'),
 ]
+
