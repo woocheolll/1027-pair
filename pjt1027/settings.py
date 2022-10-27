@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "reviews",
     "bootstrap5",
     "imagekit",
     "widget_tweaks",
