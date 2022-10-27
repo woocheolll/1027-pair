@@ -22,7 +22,7 @@
     {% for reviews in review %}
     <tr>
       <td class="fw-bold"><a href="">{{ reviews.user }}</a></td>
-      <td>{{ reviews.title }}</td>
+      <td><a href="{% url 'reviews:detail' reviews.pk %}">{{ reviews.title }}</a></td>
       <td>{{ reviews.content }}</td>
       <td>{{ reviews.movie_name }}</td>
       <td>{{ reviews.grade }}</td>
