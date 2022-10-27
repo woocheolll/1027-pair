@@ -13,10 +13,6 @@ ul {
 	list-style: none;
 }
 
-.like-heart {
-	text-decoration: none !important;
-}
-
 .box {
 	background: #fcfcfc;
 	box-shadow: -5px -5px 10px #fafbff, 5px 5px 10px rgba(22, 27, 29, 0.18);
@@ -35,4 +31,22 @@ ul {
 	display: -webkit-inline-box;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 1;
+}
+.like-active {
+	color: salmon;
+	animation: like-ani 2s;
+}
+@keyframes like-ani {
+	0% {
+		font-size: 1rem;
+	}
+	5% {
+		font-size: 1.3rem;
+	}
+	10% {
+		font-size: 1rem;
+	}
+	100% {
+		font-size: 1rem;
+	}
 }
