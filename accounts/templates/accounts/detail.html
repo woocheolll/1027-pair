@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+  <div>
+    <h1>{{ user.username }}님의 프로필</h1>
+    <p>{{ user.full_name }}
+      |
+      {{user.email}}
+    </p>
+    <p>팔로우 :
+      {{ user.followings.count }}
+      | 팔로워 :
+      {{user.followers.count}}
+      {% if request.user != user %}
+        <a href="{% url 'accounts:follow' user.pk %}" class="btn btn-primary ms-4">
+          {% if request.user in user.followers.all %}
+            언팔로우
+          {% else %}
+            팔로우
+          {% endif %}
+        </a>
+      {% endif %}
+    </p>
+  </div>
+  {% if request.user == user %}
+    <div>
+      <a href="{% url 'accounts:update' %} " class='btn btn-outline-primary'>프로필 수정</a>
+    </div>
+  {% endif %}
+  <div>
+    <h4>작성한 글</h4>
+    <p></p>
+    <p></p>
+  </div>
+  <div>
+    <h4>작성한 댓글</h4>
+    <p></p>
+    <p></p>
+  </div>
+  <div>
+    <h4>좋아요한 글</h4>
+    <p></p>
+    <p></p>
+  </div>
+{% endblock content %}
