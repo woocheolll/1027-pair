@@ -22,27 +22,23 @@
 {% endif %}
 
 {% if request.user.is_authenticated %}
-<form id="comment-form" data-article-id="{{ review.pk }}">
+<form id="comment-form" data-review-id="{{ review.pk }}">
   {% csrf_token %}
   {% bootstrap_form comment_form %}
   <input type="submit" value="작성">
 </form>
 {% endif %}
 {% endif %}
-{% for comment in comments %}
-  {% if request.user == comment.user %}
-  <a href="{}" class='btn btn-danger float-end'>삭제</a>
-  {% endif %}
-  <div class='comments'>
-    <p> {{ comment.user.username}}님 </p>
-    <p> {{ comment.content }}</p>
-  </div>
-  <hr>
-  <br>
-
-{%empty%}
-  <p>댓글이 없어요 ㅠ_ㅠ</p>
-{% endfor %}
+<div id="comments">
+  {% for comment in review.comment_set.all %}
+    <div id="comment">
+      <span> {{ comment.user.username }} | {{ comment.content }}</span>
+      <hr>   
+    </div> 
+  {% empty %}
+    <p>댓글이 없어요 ㅠ_ㅠ</p>
+  {% endfor %}
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -50,7 +46,23 @@
   const commentForm = document.querySelector('#comment-form')
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
   commentForm.addEventListener('submit', function(event) {
-    
+    event.preventDefault();
+    axios({
+      method: 'post',
+      url: `/reviews/${event.target.dataset.reviewId}/comments/`,
+      headers: {'X-CSRFToken': csrftoken},
+      data: new FormData(commentForm) 
+    })
+
+    .then(response => {
+      const comments = document.querySelector('#comments')
+      const span = document.createElement('span')
+      span.innerText = `${response.data.userName}님 | ${response.data.content}`
+      const hr = document.createElement('hr')
+      comments.append(span)
+      comments.append(hr)
+      commentForm.reset()
+    })
   })
 </script>
 
