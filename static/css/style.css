@@ -12,3 +12,27 @@ a {
 ul {
 	list-style: none;
 }
+
+.like-heart {
+	text-decoration: none !important;
+}
+
+.box {
+	background: #fcfcfc;
+	box-shadow: -5px -5px 10px #fafbff, 5px 5px 10px rgba(22, 27, 29, 0.18);
+	border-radius: 20px;
+	transition: 0.3s;
+	border: none;
+	position: relative;
+}
+.box:hover {
+	background: #eff0f5;
+	box-shadow: none;
+}
+.atc-cont {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-inline-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+}
