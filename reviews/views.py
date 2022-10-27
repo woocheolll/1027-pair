@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Review, Comment
 from .forms import CommentForm, ReviewForm
 from django.http import JsonResponse
@@ -72,13 +72,17 @@ def delete(request, pk):
 
     return redirect('reviews:index')
 
+@login_required
 def like(request, pk):
     review = Review.objects.get(pk=pk)
-    if request.user in review.like_users.all():
+    # 만약에 로그인한 유저가 이 글을 좋아요를 눌렀다면,
+    # if article.like_users.filter(id=request.user.id).exists():
+    if request.user in review.like_users.all(): 
+        # 좋아요 삭제하고
         review.like_users.remove(request.user)
     else:
+        # 좋아요 추가하고 
         review.like_users.add(request.user)
-    
-    return redirect('review:detail',pk)
-
+    # 상세 페이지로 redirect
+    return redirect('reviews:detail', pk)
 
