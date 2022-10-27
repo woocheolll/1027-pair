@@ -50,3 +50,35 @@ def create(request):
         review_form = ReviewForm()
     return render(request,'reviews/create.html',{'review_form':review_form})
 
+def update(request,pk):
+    db_data = Review.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        data = ReviewForm(request.POST, instance=db_data)
+
+        if data.is_valid():
+            data.save()
+
+            return redirect('reviews:index')
+
+    else:
+        data = ReviewForm(instance=db_data)
+
+    return render(request, 'reviews/create.html', {'data': data})
+
+def delete(request, pk):
+    review = Review.objects.get(pk=pk)
+    review.delete()
+
+    return redirect('reviews:index')
+
+def like(request, pk):
+    review = Review.objects.get(pk=pk)
+    if request.user in review.like_users.all():
+        review.like_users.remove(request.user)
+    else:
+        review.like_users.add(request.user)
+    
+    return redirect('review:detail',pk)
+
+
