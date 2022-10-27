@@ -22,29 +22,36 @@
 {% endif %}
 
 {% if request.user.is_authenticated %}
-<form action="{% url 'reviews:comment_create' review.pk %}" method='POST'>
-    {% csrf_token %}
-  <div class="input-group mb-3">
-    <textarea name="content" id="content" rows="2" col="20"></textarea>
-    <input type="submit" value="작성">
-  </div>
+<form id="comment-form" data-article-id="{{ review.pk }}">
+  {% csrf_token %}
+  {% bootstrap_form comment_form %}
+  <input type="submit" value="작성">
 </form>
 {% endif %}
 {% endif %}
 {% for comment in comments %}
-{% if request.user == comment.user %}
-<a href="{}" class='btn btn-danger float-end'>삭제</a>
-{% endif %}
-  <div class=''>
-    <p > {{ comment.user.username}}님 </p>
-    <p>{{ comment.content }}</p>
+  {% if request.user == comment.user %}
+  <a href="{}" class='btn btn-danger float-end'>삭제</a>
+  {% endif %}
+  <div class='comments'>
+    <p> {{ comment.user.username}}님 </p>
+    <p> {{ comment.content }}</p>
   </div>
   <hr>
   <br>
 
-  {%empty%}
+{%empty%}
   <p>댓글이 없어요 ㅠ_ㅠ</p>
 {% endfor %}
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const commentForm = document.querySelector('#comment-form')
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+  commentForm.addEventListener('submit', function(event) {
+    
+  })
+</script>
 
 {% endblock %}
