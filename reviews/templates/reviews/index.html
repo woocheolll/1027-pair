@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block content %}
+<h1>Movies</h1>
+<table class="table align-middle">
+  <thead>
+    <tr>
+      <th scope="col">user</th>
+      <th scope="col">Title</th>
+      <th scope="col">Content</th>
+      <th scope="col">Movie Name</th>
+      <th scope="col">Grade</th>
+      <th scope="col">Created</th>
+      <th scope="col">Updated</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    <!-- 넘겨받은 페이지 객체만큼 반복한다. -->
+    {% for reviews in review %}
+    <tr>
+      <td class="fw-bold"><a href="">{{ reviews.user }}</a></td>
+      <td>{{ reviews.title }}</td>
+      <td>{{ reviews.content }}</td>
+      <td>{{ reviews.movie_name }}</td>
+      <td>{{ reviews.grade }}</td>
+      <td>{{ reviews.created_at }}</td>
+      <td>{{ reviews.updated_at }}</td>
+    </tr>
+    {% endfor %} 
+  </tbody>
+</table>
+<div class="d-flex justify-content-end">
+  <a href="">
+    <button type="button" class="btn btn-primary mb-3">New Movie</button>
+  </a>
+</div>
+{% endblock %}
