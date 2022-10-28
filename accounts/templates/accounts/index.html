@@ -8,6 +8,9 @@
         <li class="box p-2 mb-3">
           <p class="d-flex justify-content-between">
             <a href="{% url 'accounts:detail' user.pk %}" class="p-3">
+              {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}" alt="">
+              {% endif %}
               {{user.username}}
             </a>
             <span>{{user.email}}</span>

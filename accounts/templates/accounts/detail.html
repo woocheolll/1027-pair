@@ -2,9 +2,15 @@
 {% load bootstrap5 %}
 
 {% block content %}
-  <div class="d-flex justify-content-between mt-3">
-    <div>
-      <h1>{{ user.username }}님의 프로필</h1>
+  <div>
+    <div class="d-flex">
+    {% if user.profile_image %}
+      <img src="{{ user.profile_image.url }}" alt="">
+    {% endif %}
+    <h1>{{ user.username }}님의 프로필</h1>
+    </div>
+    {% if user.full_name and user.email %}
+
       <p>{{ user.full_name }}
         |
         {{user.email}}
@@ -30,6 +36,7 @@
             </form>
           {% endif %}
         </div>
+
       </div>
     </div>
     {% if request.user == user %}
