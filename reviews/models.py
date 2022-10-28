@@ -1,3 +1,4 @@
+from random import choices
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -10,10 +11,19 @@ class Review(models.Model):
     title = models.CharField(max_length=30)
     content = models.TextField()
     movie_name = models.CharField(max_length=50)
-    grade = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(5.0)])
+    grade = models.FloatField(
+        validators=[MinValueValidator(0.0), MaxValueValidator(5.0)]
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_reviews')
+    like_users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="like_reviews"
+    )
+    CATAGORY_CHOICES = (
+        ("해외영화", "해외영화"),
+        ("국내영화", "국내영화"),
+    )
+    catagory = models.TextField(choices=CATAGORY_CHOICES, default="국내영화")
 
 
 class Comment(models.Model):
