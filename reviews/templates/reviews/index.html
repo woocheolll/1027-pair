@@ -15,7 +15,14 @@
       </div>
     {% endfor %}
   {% endif %}
+
   <div class="d-flex justify-content-end">
+    <select class="form-select" aria-label="Default select example">
+      <option selected="selected">Open this select menu</option>
+      <option value="1">One</option>
+      <option value="2">Two</option>
+      <option value="3">Three</option>
+    </select>
     <a href="{% url 'reviews:create' %}">
       <button type="button" class="btn btn-primary mb-3">리뷰 작성</button>
     </a>
@@ -28,8 +35,9 @@
             <h4>{{ reviews.title }}</h4>
             <p>{{ reviews.user }}</p>
             <p>
-              <span>{{ reviews.movie_name }}</span>
-              <span>{{ reviews.grade }}</span>
+              <span>{{ reviews.movie_name }}/</span>
+              <span>{{ reviews.grade }}/</span>
+              <span>{{ reviews.catagory }}</span>
             </p>
             <p class="atc-cont">{{ reviews.content }}</p>
             <p class="text-end">

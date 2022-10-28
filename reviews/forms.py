@@ -10,8 +10,8 @@ class CommentForm(forms.ModelForm):
             "content": "",
         }
 
+
 class ReviewForm(forms.ModelForm):
-    
-    class Meta():
+    class Meta:
         model = Review
-        fields = ['title','content','movie_name','grade']
+        fields = ["title", "content", "movie_name", "grade", "catagory"]
