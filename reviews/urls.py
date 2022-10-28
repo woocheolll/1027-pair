@@ -8,7 +8,8 @@ urlpatterns = [
     path("<int:pk>/", views.detail, name="detail"),
     path("<int:pk>/comments/", views.comments, name="comments"),
     path("create/", views.create, name="create"),
-    path('<int:pk>/update/', views.update, name='update'),
-    path('<int:pk>/delete/', views.delete, name='delete'),
-    path('<int:pk>/like/', views.like, name='like'),
+    path("<int:pk>/update/", views.update, name="update"),
+    path("<int:pk>/delete/", views.delete, name="delete"),
+    path("<int:pk>/like/", views.like, name="like"),
+    path("category/<str:val>/", views.category, name="category"),
 ]

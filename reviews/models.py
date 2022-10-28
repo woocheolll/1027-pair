@@ -19,11 +19,11 @@ class Review(models.Model):
     like_users = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="like_reviews"
     )
-    CATAGORY_CHOICES = (
-        ("해외영화", "해외영화"),
-        ("국내영화", "국내영화"),
+    CATEGORY_CHOICES = (
+        ("2", "해외영화"),
+        ("3", "국내영화"),
     )
-    catagory = models.TextField(choices=CATAGORY_CHOICES, default="국내영화")
+    category = models.TextField(choices=CATEGORY_CHOICES, default="2")
 
 
 class Comment(models.Model):

@@ -4,49 +4,86 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% block content %}
-  <h2>영화 리뷰</h2>
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
-        <div class="container">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      </div>
-    {% endfor %}
-  {% endif %}
+<h2>영화 리뷰</h2>
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+  <div class="container">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+</div>
+{% endfor %}
+{% endif %}
 
-  <div class="d-flex justify-content-end">
-    <select class="form-select" aria-label="Default select example">
-      <option selected="selected">Open this select menu</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
+<div class="d-flex justify-content-between">
+  <form id="select-form" action="">
+    {% csrf_token %}
+    <select id="category-sel" class="form-select" onchange="showValue(this)">
+      <option selected="selected" value="1">전체</option>
+      <option value="2">국내 영화</option>
+      <option value="3">해외 영화</option>
     </select>
-    <a href="{% url 'reviews:create' %}">
-      <button type="button" class="btn btn-primary mb-3">리뷰 작성</button>
-    </a>
-  </div>
-  <div>
-    <div class="row g-3">
-      {% for reviews in review %}
-        <a href="{% url 'reviews:detail' reviews.pk %}">
-          <div class="col-12 box p-3">
-            <h4>{{ reviews.title }}</h4>
-            <p>{{ reviews.user }}</p>
-            <p>
-              <span>{{ reviews.movie_name }}/</span>
-              <span>{{ reviews.grade }}/</span>
-              <span>{{ reviews.catagory }}</span>
-            </p>
-            <p class="atc-cont">{{ reviews.content }}</p>
-            <p class="text-end">
-              {{ reviews.created_at|date:"SHORT_DATETIME_FORMAT" }}
-            </p>
-          </div>
-        </a>
-      {% endfor %}
+  </form>
+  <a href="{% url 'reviews:create' %}">
+    <button type="button" class="btn btn-primary mb-3">리뷰 작성</button>
+  </a>
+</div>
+<div>
+  <div id="review-box" class="row g-3">
+    {% for reviews in review %}
+    <!-- <a href="{% url 'reviews:detail' reviews.pk %}"> -->
+    <div class="col-12 box p-3">
+      <h4>{{ reviews.title }}</h4>
+      <p>{{ reviews.user }}</p>
+      <p>
+        <span>{{ reviews.movie_name }}/</span>
+        <span>{{ reviews.grade }}/</span>
+        <span>{{ reviews.category }}</span>
+      </p>
+      <p class="atc-cont">{{ reviews.content }}</p>
+      <p class="text-end">
+        {{ reviews.created_at|date:"SHORT_DATETIME_FORMAT" }}
+      </p>
     </div>
+    </a>
+    {% endfor %}
   </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const showValue = (target) => {
+    let val = target.value
+    console.log(target.value);
+    axios({
+      method: 'get',
+      url: `/reviews/category/${target.value}`,
+    }).then(response => {
+      const reviewBox = document.querySelector('#review-box');
+      reviewBox.textContent = "";
+      const relist = response.data.relist;
 
+      for (let i = 0; i < relist.length; i++) {
+        console.log(relist[i].pk);
+
+        reviewBox.insertAdjacentHTML('beforeend',
+          ` 
+          <div class="col-12 box p-3">
+          <h4>${relist[i].title}</h4>
+        <p>
+          <span>${relist[i].movie_name}/</span>
+          <span>${relist[i].grade}/</span>
+          <span>${relist[i].category}</span>
+        </p>
+        <p class="atc-cont">${relist[i].content}</p>
+        <p class="text-end">
+          ${relist[i].created_at}
+          </p>
+          </a>
+          </div>`
+        )
+      }
+    })
+  };
+</script>
 {% endblock %}

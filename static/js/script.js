@@ -53,3 +53,21 @@ commentForm
         })
     });
 
+
+
+const selectForm = document.querySelector('#select-form');
+const ctgSel = document.querySelector('#category-sel');
+
+selectForm.addEventListener('submit', function (event) {
+    event.preventDefault()
+    axios({
+        method: 'post',
+        url: `/reviews/category/`,
+        data: { 'value': event.value }
+    })
+        .then(response => {
+            console.log('성공');
+
+        })
+
+})

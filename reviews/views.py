@@ -3,6 +3,7 @@ from .models import Review, Comment
 from .forms import CommentForm, ReviewForm
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+import json
 
 
 def index(request):
@@ -39,50 +40,78 @@ def comments(request, pk):
 
 @login_required
 def create(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         review_form = ReviewForm(request.POST)
         if review_form.is_valid():
             db_review_form = review_form.save(commit=False)
             db_review_form.user = request.user
             db_review_form.save()
-            return redirect('reviews:index')
+            return redirect("reviews:index")
     else:
         review_form = ReviewForm()
-    return render(request,'reviews/create.html',{'review_form':review_form})
+    return render(request, "reviews/create.html", {"review_form": review_form})
 
-def update(request,pk):
+
+def update(request, pk):
     db_review_form = Review.objects.get(pk=pk)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         review_form = ReviewForm(request.POST, instance=db_review_form)
 
         if review_form.is_valid():
             review_form.save()
 
-            return redirect('reviews:index')
+            return redirect("reviews:index")
 
     else:
         review_form = ReviewForm(instance=db_review_form)
 
-    return render(request, 'reviews/create.html', {'review_form': review_form})
+    return render(request, "reviews/create.html", {"review_form": review_form})
+
 
 def delete(request, pk):
     review = Review.objects.get(pk=pk)
     review.delete()
 
-    return redirect('reviews:index')
+    return redirect("reviews:index")
+
 
 @login_required
 def like(request, pk):
     review = Review.objects.get(pk=pk)
     # 만약에 로그인한 유저가 이 글을 좋아요를 눌렀다면,
     # if article.like_users.filter(id=request.user.id).exists():
-    if request.user in review.like_users.all(): 
+    if request.user in review.like_users.all():
         # 좋아요 삭제하고
         review.like_users.remove(request.user)
     else:
-        # 좋아요 추가하고 
+        # 좋아요 추가하고
         review.like_users.add(request.user)
     # 상세 페이지로 redirect
-    return redirect('reviews:detail', pk)
+    return redirect("reviews:detail", pk)
 
+
+def category(request, val):
+    if val == "1":
+        reviews = Review.objects.all().order_by("-pk")
+    elif val == "2":
+        reviews = Review.objects.filter(category=val)
+    elif val == "3":
+        reviews = Review.objects.filter(category=val)
+    relist = []
+    for r in reviews:
+        relist.append(
+            {
+                "pk": r.pk,
+                "title": r.title,
+                "content": r.content,
+                "movie_name": r.movie_name,
+                "grade": r.grade,
+                "created_at": r.created_at,
+                "category": r.category,
+            }
+        )
+    context = {
+        "relist": relist,
+    }
+    return JsonResponse(context)

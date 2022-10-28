@@ -4,40 +4,39 @@
 {% block content %}
   <div>
     <div class="d-flex">
-    {% if user.profile_image %}
-      <img src="{{ user.profile_image.url }}" alt="">
-    {% endif %}
-    <h1>{{ user.username }}님의 프로필</h1>
+      {% if user.profile_image %}
+        <img src="{{ user.profile_image.url }}" alt="">
+      {% endif %}
+      <h1>{{ user.username }}님의 프로필</h1>
+      {% if user.full_name and user.email %}
+        <p>{{ user.full_name }}
+          |
+          {{user.email}}
+        </p>
+      {% endif %}
     </div>
-    {% if user.full_name and user.email %}
-
-      <p>{{ user.full_name }}
-        |
-        {{user.email}}
-      </p>
-      <div class="d-flex">
-        <div class="text-center me-3">
-          <p>팔로워</p>
-          <span id="followers-count">{{ user.followers.all|length }}</span>
-        </div>
-        <div class="text-center">
-          <p>팔로잉</p>
-          <span id="followings-count">{{ user.followings.all|length }}</span>
-        </div>
-        <div class="ms-3 mt-3">
-          {% if request.user != user %}
-            <form id="follow-form" data-user-id="{{ user.pk }}">
-              {% csrf_token %}
-              {% if request.user in user.followers.all %}
-                <input type="submit" value="unfollow" class="btn btn-outline-dark">
-              {% else %}
-                <input type="submit" value="follow" class="btn btn-dark">
-              {% endif %}
-            </form>
-          {% endif %}
-        </div>
-
+    <div class="d-flex">
+      <div class="text-center me-3">
+        <p>팔로워</p>
+        <span id="followers-count">{{ user.followers.all|length }}</span>
       </div>
+      <div class="text-center">
+        <p>팔로잉</p>
+        <span id="followings-count">{{ user.followings.all|length }}</span>
+      </div>
+      <div class="ms-3 mt-3">
+        {% if request.user != user %}
+          <form id="follow-form" data-user-id="{{ user.pk }}">
+            {% csrf_token %}
+            {% if request.user in user.followers.all %}
+              <input type="submit" value="unfollow" class="btn btn-outline-dark">
+            {% else %}
+              <input type="submit" value="follow" class="btn btn-dark">
+            {% endif %}
+          </form>
+        {% endif %}
+      </div>
+
     </div>
     {% if request.user == user %}
       <div class="mt-3">
@@ -78,5 +77,5 @@
       <p></p>
     </div>
   </div>
-</div>
+
 {% endblock content %}
