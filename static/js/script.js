@@ -1,22 +1,55 @@
 'use strict';
 
-const followForm = document.querySelector('#follow-form');
-const followBtn = document.querySelector('#followBtn');
-const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+const form = document.querySelector('#follow-form')
+form.addEventListener('submit', function (event) {
+    event.preventDefault()
+    const userId = event.target.dataset.userId
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
 
-followForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    console.log(e.target);
     axios({
-        method: 'post',
-        url: `/accounts/${e.target.dataset.userID}/follow/`,
-        headers: { 'X-CSRFToken': csrftoken },
+        method: 'POST',
+        url: `/accounts/${userId}/follow/`,
+        headers: { 'X-CSRFToken': csrftoken, }
     })
-        .then(response => {
-            if (response.data.isFollow === true) {
-                followBtn.innerText = '언팔로우'
+        .then((response) => {
+            const isFollow = response.data.isFollow
+            const followBtn = document.querySelector('#follow-form > input[type=submit]')
+            if (isFollow === true) {
+                followBtn.value = 'unfollow'
             } else {
-                followBtn.innerText = '팔로우'
+                followBtn.value = 'follow'
             }
+            const followersCountTag = document.querySelector('#followers-count')
+            const followingsCountTag = document.querySelector('#followings-count')
+            const followersCount = response.data.followers_count
+            const followingsCount = response.data.followings_count
+            followersCountTag.innerText = followersCount
+            followingsCountTag.innerText = followingsCount
         })
 });
+
+const commentForm = document.querySelector('#comment-form')
+const csrftoken = document
+    .querySelector('[name=csrfmiddlewaretoken]')
+    .value
+commentForm
+    .addEventListener('submit', function (event) {
+        event.preventDefault();
+        axios({
+            method: 'post',
+            url: `/reviews/${event.target.dataset.reviewId}/comments/`,
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            data: new FormData(commentForm)
+        }).then(response => {
+            const comments = document.querySelector('#comments')
+            const span = document.createElement('span')
+            span.innerText = `${response.data.userName}님 | ${response.data.content}`
+            const hr = document.createElement('hr')
+            comments.append(span)
+            comments.append(hr)
+            commentForm.reset()
+        })
+    });
+
